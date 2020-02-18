@@ -88,6 +88,7 @@ export class HomeComponent implements OnInit {
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           this.recorded_message = this.recorded_message.toString().concat(event.results[i][0].transcript);
+          console.log("recorded_message" + this.recorded_message)
         }
       }
     };
@@ -100,6 +101,7 @@ export class HomeComponent implements OnInit {
 
   stopRecording() {
     this.recognition.stop();
+    this.recorded_message = "";
   }
 
 }

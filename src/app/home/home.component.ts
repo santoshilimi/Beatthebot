@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { questions } from '../constant.file';
 import { SpeechRecognitionService } from '../speech-recognition.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   currentQuestion: any;
   handledUserQuestionSet = [];
   handledBotQuestionSet = [];
@@ -21,6 +23,7 @@ export class HomeComponent implements OnInit {
   recognition = new window.speechRecognition();
 
   spellUserText: any;
+  public unsubscribe$ = new Subject<void>();
   constructor(public speechService: SpeechRecognitionService) { }
 
   ngOnInit() {
@@ -29,15 +32,17 @@ export class HomeComponent implements OnInit {
   }
   checkTheBotAnswer() {
     const question = this.currentQuestion;
-    this.speechService.getConfig([question]).subscribe(response => {
-      question.tgt = response['response_body'][0].tgt;
-      this.currentBotQuestion = question;
-      this.handledBotQuestionSet.push(question);
+    this.speechService.getConfig([question])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        question.tgt = response['response_body'][0].tgt;
+        this.currentBotQuestion = question;
+        this.handledBotQuestionSet.push(question);
 
-    });
+      });
   }
   getNextQuestion() {
-    this.currentQuestion = questions[this.currentQuestion.index + 1];
+    this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];
     this.currentBotQuestion = '';
     this.currentUserQuestion = '';
     this.showRecord = true;
@@ -53,30 +58,34 @@ export class HomeComponent implements OnInit {
     // this.botCorrectAnsCount--;
   }
   userCorrectAns() {
-    this.currentQuestion.userAns = 1;
+    this.currentUserQuestion.userAns = 1;
     this.usrCorrectAnsCount++;
   }
   userWrongAns() {
-    this.currentQuestion.userAns = 0;
+    this.currentUserQuestion.userAns = 0;
     // this.usrCorrectAnsCount--;
   }
   getTextFromUser() {
-    const question = this.currentQuestion;
     const obj = {
-      'src': this.recorded_message === '' ?
-        'Translate is a free multilingual machine translation service developed by Google, to translate text' : this.recorded_message,
-      'id': 56,
+      src: this.recorded_message,
+      "id": 56,
+      "index": 2,
+      "userAns": '',
+      "botAns": ''
     };
-    question.src = this.recorded_message;
+    // question.src = this.recorded_message;
     this.recorded_message = "";
-    this.speechService.getConfig([obj]).subscribe(response => {
-      question.tgt = response['response_body'][0].tgt;
-      this.currentUserQuestion = question;
-      this.handledUserQuestionSet.push(question);
-    });
+    this.speechService.getConfig([obj])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {
+        obj['tgt'] = response['response_body'][0].tgt;
+        this.currentUserQuestion = obj;
+        this.handledUserQuestionSet.push(obj);
+      });
 
   }
   startRecording() {
+    this.recorded_message = "";
     this.showRecord = false;
     if (window.speechRecognition === undefined) {
       alert('Speech Recogniztion API Not Supported');
@@ -85,18 +94,20 @@ export class HomeComponent implements OnInit {
     this.recognition.continuous = true;
 
     this.recognition.onerror = (error) => {
+    this.recorded_message = "";
     };
     this.recognition.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           this.recorded_message = this.recorded_message.toString().concat(event.results[i][0].transcript);
+          console.log(this.recorded_message, 'recorded_message');
         }
       }
     };
     this.recognition.onend = (event) => {
     };
     this.recognition.start();
-
+    console.log(this.recorded_message, 'recorded_message');
   }
 
   stopRecording() {
@@ -104,7 +115,10 @@ export class HomeComponent implements OnInit {
     this.recognition.stop();
     this.getTextFromUser();
   }
-
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }
 
 

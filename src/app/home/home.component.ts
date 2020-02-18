@@ -42,13 +42,22 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
   getNextQuestion() {
-    this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];
-    this.handledBotQuestionSet.push(this.currentBotQuestion);
-    this.handledUserQuestionSet.push(this.currentUserQuestion);
-
-    this.currentBotQuestion = '';
-    this.currentUserQuestion = '';
-    this.showRecord = true;
+    if (this.currentQuestion.index + 1 === 5) {
+      if (this.usrCorrectAnsCount === this.botCorrectAnsCount) {
+        alert('Tie');
+      } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount){
+        alert('Winner is user');
+      } else {
+        alert('Winner is Bot');
+      }
+    } else {
+      this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];
+      this.handledBotQuestionSet.push(this.currentBotQuestion);
+      this.handledUserQuestionSet.push(this.currentUserQuestion);
+      this.currentBotQuestion = '';
+      this.currentUserQuestion = '';
+      this.showRecord = true;
+    }
   }
 
   botCorrectAns() {

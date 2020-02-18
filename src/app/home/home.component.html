@@ -23,17 +23,13 @@
         <button (click)="startRecording()"> start recording </button>
         <button (click)="stopRecording()"> stop recording </button>
 
-        <input placeholder="spell above sentence" [(ngModel)]="spellUserText">
         <div class="audio-container" >
-          <div class="audio-icon" (click)="getSpeechTextFromUser()">
-            <img src="../../assets/audio-record.svg" alt=""></div>
-          <button class="btn btn--start btn--small text-center" (click)="checkTheBotAnswer()">check</button>
+          <button class="btn btn--start btn--small text-center" (click)="checkTheBotAnswer()">check bot ans</button>
         </div>
         <h2 class="audio-printed" *ngIf="currentUserQuestion">
             {{currentUserQuestion['tgt']}}</h2>
       </div>
       <div class="record__audio__bot">
-     
         <h2 class="bot-printed" *ngIf="currentBotQuestion">
           {{currentBotQuestion['tgt']}}</h2>
       </div>

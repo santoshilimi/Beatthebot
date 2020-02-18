@@ -24,16 +24,17 @@ export class HomeComponent implements OnInit {
   constructor(public speechService: SpeechRecognitionService) { }
 
   ngOnInit() {
-    console.log(questions);
     this.currentQuestion = questions[0];
 
   }
   checkTheBotAnswer() {
+    console.log(this.currentUserQuestion, 'this.currentUserQuestion');
+    const currentQuestion = this.currentQuestion;
     this.speechService.getConfig([this.currentQuestion]).subscribe(response => {
-      console.log(response, 'response');
-      this.currentQuestion.tgt = response['response_body'][0].tgt;
-      this.currentBotQuestion = this.currentQuestion;
-      this.handledBotQuestionSet.push(this.currentQuestion);
+      currentQuestion.tgt = response['response_body'][0].tgt;
+      this.currentBotQuestion = currentQuestion;
+      this.handledBotQuestionSet.push(currentQuestion);
+      console.log(this.currentUserQuestion, 'this.currentUserQuestion after');
 
     });
   }
@@ -61,17 +62,17 @@ export class HomeComponent implements OnInit {
     // this.usrCorrectAnsCount--;
   }
   getSpeechTextFromUser() {
-    console.log('getSpeechTextFromUser');
+    const currentQuestion = this.currentQuestion;
     const obj = {
-      'src': this.spellUserText,
+      'src': this.recorded_message === '' ? 'hey how are you' : this.recorded_message,
       'id': 56,
     };
-    console.log(obj, 'obj');
+    this.recorded_message = "";
     this.speechService.getConfig([obj]).subscribe(response => {
-      console.log(response, 'response');
-      this.currentQuestion.tgt = response['response_body'][0].tgt;
-      this.currentUserQuestion = this.currentQuestion;
-      this.handledUserQuestionSet.push(this.currentQuestion);
+      currentQuestion.tgt = response['response_body'][0].tgt;
+      this.currentUserQuestion = currentQuestion;
+      this.handledUserQuestionSet.push(currentQuestion);
+      console.log(this.currentUserQuestion, 'this.currentUserQuestion');
     });
   }
   startRecording() {
@@ -82,18 +83,15 @@ export class HomeComponent implements OnInit {
     this.recognition.continuous = true;
 
     this.recognition.onerror = (error) => {
-      console.log("error" + error);
     };
     this.recognition.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           this.recorded_message = this.recorded_message.toString().concat(event.results[i][0].transcript);
-          console.log("recorded_message" + this.recorded_message)
         }
       }
     };
     this.recognition.onend = (event) => {
-      console.log('end' + event);
     };
     this.recognition.start();
     console.log('recorded_message', this.recorded_message);
@@ -101,7 +99,7 @@ export class HomeComponent implements OnInit {
 
   stopRecording() {
     this.recognition.stop();
-    this.recorded_message = "";
+    this.getSpeechTextFromUser();
   }
 
 }

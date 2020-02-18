@@ -37,12 +37,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         question.tgt = response['response_body'][0].tgt;
         this.currentBotQuestion = question;
-        this.handledBotQuestionSet.push(question);
+        // this.handledBotQuestionSet.push(question);
 
       });
   }
   getNextQuestion() {
     this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];
+    this.handledBotQuestionSet.push(this.currentBotQuestion);
+    this.handledUserQuestionSet.push(this.currentUserQuestion);
+
     this.currentBotQuestion = '';
     this.currentUserQuestion = '';
     this.showRecord = true;
@@ -73,15 +76,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       "userAns": '',
       "botAns": ''
     };
+    this.currentUserQuestion = obj;
     // question.src = this.recorded_message;
     this.recorded_message = "";
-    this.speechService.getConfig([obj])
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {
-        obj['tgt'] = response['response_body'][0].tgt;
-        this.currentUserQuestion = obj;
-        this.handledUserQuestionSet.push(obj);
-      });
+    // this.speechService.getConfig([obj])
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe(response => {
+    //     obj['tgt'] = response['response_body'][0].tgt;
+    //     this.currentUserQuestion = obj;
+    //     this.handledUserQuestionSet.push(obj);
+    //   });
 
   }
   startRecording() {
@@ -94,7 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.recognition.continuous = true;
 
     this.recognition.onerror = (error) => {
-    this.recorded_message = "";
+      this.recorded_message = "";
     };
     this.recognition.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; ++i) {

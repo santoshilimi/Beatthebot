@@ -29,7 +29,7 @@
             <div class="audio-icon"><img src="/assets/images/stop.svg" alt=""></div>
         </div>
           <h2 class="audio-printed" *ngIf="currentUserQuestion">
-            {{currentUserQuestion['tgt']}}</h2>
+            {{currentUserQuestion['src']}}</h2>
       </div>
       <div class="arrow-image" (click)="checkTheBotAnswer()">
           <img src="/assets/images/right-arrow.svg" alt="">
@@ -54,7 +54,7 @@
             <div class="icon icon--right"></div>
           </div>
           <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
-          <p class="m-0">{{items['tgt']}}</p>
+          <p class="m-0">{{items['src']}}</p>
         </div>
       </div>
       <div class="question__set__bot">

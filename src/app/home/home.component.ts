@@ -7,13 +7,12 @@ import { SpeechRecognitionService } from '../speech-recognition.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  speechData: any;
   currentQuestion: any;
-  currentUserQuestion: any;
   handledUserQuestionSet = [];
   handledBotQuestionSet = [];
   questionsSet = questions;
   currentBotQuestion: any;
+  currentUserQuestion: any;
   botCorrectAnsCount = 0;
   usrCorrectAnsCount = 0;
   showRecord = true;
@@ -25,17 +24,15 @@ export class HomeComponent implements OnInit {
   constructor(public speechService: SpeechRecognitionService) { }
 
   ngOnInit() {
-    this.currentQuestion = questions[0];
+    this.currentQuestion = this.questionsSet[0];
 
   }
   checkTheBotAnswer() {
-    console.log(this.currentUserQuestion, 'this.currentUserQuestion');
-    const currentQuestion = this.currentQuestion;
-    this.speechService.getConfig([this.currentQuestion]).subscribe(response => {
-      currentQuestion.tgt = response['response_body'][0].tgt;
-      this.currentBotQuestion = currentQuestion;
-      this.handledBotQuestionSet.push(currentQuestion);
-      console.log(this.currentUserQuestion, 'this.currentUserQuestion after');
+    const question = this.currentQuestion;
+    this.speechService.getConfig([question]).subscribe(response => {
+      question.tgt = response['response_body'][0].tgt;
+      this.currentBotQuestion = question;
+      this.handledBotQuestionSet.push(question);
 
     });
   }
@@ -64,18 +61,20 @@ export class HomeComponent implements OnInit {
     // this.usrCorrectAnsCount--;
   }
   getTextFromUser() {
-    const currentQuestion = this.currentQuestion;
+    const question = this.currentQuestion;
     const obj = {
-      'src': this.recorded_message,
+      'src': this.recorded_message === '' ?
+        'Translate is a free multilingual machine translation service developed by Google, to translate text' : this.recorded_message,
       'id': 56,
     };
+    question.src = this.recorded_message;
     this.recorded_message = "";
     this.speechService.getConfig([obj]).subscribe(response => {
-      currentQuestion.tgt = response['response_body'][0].tgt;
-      this.currentUserQuestion = currentQuestion;
-      this.handledUserQuestionSet.push(currentQuestion);
-      console.log(this.currentUserQuestion, 'this.currentUserQuestion');
+      question.tgt = response['response_body'][0].tgt;
+      this.currentUserQuestion = question;
+      this.handledUserQuestionSet.push(question);
     });
+
   }
   startRecording() {
     this.showRecord = false;
@@ -97,7 +96,7 @@ export class HomeComponent implements OnInit {
     this.recognition.onend = (event) => {
     };
     this.recognition.start();
-    console.log('recorded_message', this.recorded_message);
+
   }
 
   stopRecording() {

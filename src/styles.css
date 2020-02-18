@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+@font-face {
+    font-family: boogaloo;
+    src: url('/assets/fonts/boogaloo/Boogaloo-Regular.ttf');
+}
+
+body {
+    font-family: "boogaloo";
+    padding: 0;
+    margin: 0;
+    outline: none;
+    width: 100%;
+    height: 100vh;
+}

@@ -35,35 +35,56 @@
       </div>
     </div>
 
-    <div class="question__set__container">
-      <div class="question__set">
-        <div class="question__set__user">
-          <div *ngFor="let items of handledUserQuestionSet; let i = index">
-            <div class="question__status question__status--left" *ngIf="items['userAns'] === 0">
-              <div class="icon icon--wrong"></div>
-            </div>
-            <div class="question__status question__status--left" *ngIf="items['userAns'] === 1">
-              <div class="icon icon--right"></div>
-            </div>
-            <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
-            <p class="m-0">{{items['tgt']}}</p>
+    <div class="record__audio">
+      <div class="record__audio__user">
+          <div class="audio-container">
+              <div class="audio-icon"><img src="/assets/images/audio-record.svg" alt=""></div>
           </div>
-        </div>
-        <div class="question__set__bot">
-          <div *ngFor="let items of handledBotQuestionSet; let i = index">
-            <div class="question__status question__status--right" *ngIf="items['botAns'] === 0">
-              <div class="icon icon--wrong"></div>
-            </div>
-            <div class="question__status question__status--right" *ngIf="items['botAns']=== 1">
-              <div class="icon icon--right"></div>
-            </div>
-            <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
-            <p class="m-0">{{items['tgt']}}</p>
+          <!-- <div class="audio-container">
+            <div class="audio-icon"><img src="/assets/images/stop.svg" alt=""></div>
+        </div> -->
+          <h2 class="audio-printed">
+              Recorded Hindi translated text</h2>
+      </div>
+      <div class="arrow-image">
+          <img src="/assets/images/right-arrow.svg" alt="">
+      </div>
+      <div class="record__audio__bot">
+          <div class="audio-container">
+              <div class="bot-icon"><img src="/assets/images/bot.svg" alt=""></div>
           </div>
+          <h2 class="bot-printed">
+              Bot Hindi translated text</h2>
+      </div>
+  </div>
 
+    <div class="question__set__container">
+
+      <div class="question__set__user">
+        <div *ngFor="let items of questionsSet; let i = index" class="question__set">
+          <div class="question__status question__status--left" *ngIf="items['userAns'] === 0">
+            <div class="icon icon--wrong"></div>
+          </div>
+          <div class="question__status question__status--left" *ngIf="items['userAns'] === 1">
+            <div class="icon icon--right"></div>
+          </div>
+          <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
+          <p class="m-0">{{items['src']}}</p>
         </div>
       </div>
+      <div class="question__set__bot">
+        <div *ngFor="let items of questionsSet; let i = index" class="question__set">
+          <div class="question__status question__status--right" *ngIf="items['botAns'] === 0">
+            <div class="icon icon--wrong"></div>
+          </div>
+          <div class="question__status question__status--right" *ngIf="items['botAns']=== 1">
+            <div class="icon icon--right"></div>
+          </div>
+          <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
+          <p class="m-0">{{items['src']}}</p>
+        </div>
 
+      </div>
 
 
     </div>

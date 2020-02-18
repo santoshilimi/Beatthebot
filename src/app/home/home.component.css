@@ -134,7 +134,7 @@
     border-radius: 20px;
     box-shadow: 0 0 3em rgba(0, 0, 0, 0.3);
     max-width: 1200px;
-    overflow: hidden;
+    overflow: auto;
     position: relative;
     transition: all .3s ease;
     width: 90vw;
@@ -222,6 +222,7 @@
 .arrow-image {
     width: 64px;
     height: 64px;
+    margin: 0 16px;
 }
 
 .arrow-image img {
@@ -231,6 +232,11 @@
 .record__audio {
     display: flex;
     justify-content: space-around;
+}
+
+.record__audio__user,
+.record__audio__bot {
+    flex: 1 50%;
 }
 
 .record__audio__user,
@@ -288,7 +294,7 @@
 
 .question__set__container {
     padding: 16px 0;
-    min-height: 180px;
+    /* min-height: 180px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -322,7 +328,6 @@
 
 .question__status {
     position: absolute;
-    height: 100%;
 }
 
 .question__status--left {

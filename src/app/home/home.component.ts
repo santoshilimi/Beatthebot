@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   currentBotQuestion: any;
   botCorrectAnsCount = 0;
   usrCorrectAnsCount = 0;
+  showRecord = true;
   // tslint:disable-next-line: variable-name
   recorded_message = '';
   recognition = new window.speechRecognition();
@@ -42,6 +43,7 @@ export class HomeComponent implements OnInit {
     this.currentQuestion = questions[this.currentQuestion.index + 1];
     this.currentBotQuestion = '';
     this.currentUserQuestion = '';
+    this.showRecord = true;
   }
 
   botCorrectAns() {
@@ -61,10 +63,10 @@ export class HomeComponent implements OnInit {
     this.currentQuestion.userAns = 0;
     // this.usrCorrectAnsCount--;
   }
-  getSpeechTextFromUser() {
+  getTextFromUser() {
     const currentQuestion = this.currentQuestion;
     const obj = {
-      'src': this.recorded_message === '' ? 'hey how are you' : this.recorded_message,
+      'src': this.recorded_message,
       'id': 56,
     };
     this.recorded_message = "";
@@ -76,6 +78,7 @@ export class HomeComponent implements OnInit {
     });
   }
   startRecording() {
+    this.showRecord = false;
     if (window.speechRecognition === undefined) {
       alert('Speech Recogniztion API Not Supported');
     }
@@ -98,8 +101,9 @@ export class HomeComponent implements OnInit {
   }
 
   stopRecording() {
+    this.showRecord = true;
     this.recognition.stop();
-    this.getSpeechTextFromUser();
+    this.getTextFromUser();
   }
 
 }

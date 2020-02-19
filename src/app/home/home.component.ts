@@ -3,6 +3,7 @@ import { questions } from '../constant.file';
 import { SpeechRecognitionService } from '../speech-recognition.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -24,10 +25,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   spellUserText: any;
   public unsubscribe$ = new Subject<void>();
-  constructor(public speechService: SpeechRecognitionService) { }
+  constructor(public speechService: SpeechRecognitionService, public router: Router) { }
 
   ngOnInit() {
     this.currentQuestion = this.questionsSet[0];
+    this.recognition.lang = 'hi';
 
   }
   checkTheBotAnswer() {
@@ -45,10 +47,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.currentQuestion.index + 1 === 5) {
       if (this.usrCorrectAnsCount === this.botCorrectAnsCount) {
         alert('Tie');
+        this.router.navigate(['/landing']);
+
       } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount){
-        alert('Winner is user');
+        alert('congratulation you are the Winner');
+        this.router.navigate(['/landing']);
+
       } else {
         alert('Winner is Bot');
+        this.router.navigate(['/landing']);
+
       }
     } else {
       this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];

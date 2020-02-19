@@ -8,12 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LandingComponent } from './landing/landing.component';
 import { EndComponent } from './end/end.component';
+import {TelemetryService} from './services/telemetry/telemetry.service';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LandingComponent,
-    EndComponent
+    EndComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,7 +22,7 @@ import { EndComponent } from './end/end.component';
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [TelemetryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

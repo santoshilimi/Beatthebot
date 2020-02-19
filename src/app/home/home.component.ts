@@ -4,6 +4,7 @@ import { SpeechRecognitionService } from '../speech-recognition.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { TelemetryService } from '../services/telemetry/telemetry.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,15 +23,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   nextCount = 1;
   nextButtonname: any;
   questionSetNumber: any;
+  STALL_ID = 'STA3';
+  IDEA_ID = 'IDE26';
   // tslint:disable-next-line: variable-name
   recorded_message = '';
   recognition = new window.speechRecognition();
 
   spellUserText: any;
   public unsubscribe$ = new Subject<void>();
-  constructor(public speechService: SpeechRecognitionService, public router: Router) { }
+  constructor(public speechService: SpeechRecognitionService, public router: Router,
+    public telemetryService: TelemetryService) { }
 
   ngOnInit() {
+    this.telemetryService.initialize({
+      did: 'device1',
+      stallId: this.STALL_ID,
+      ideaId: this.IDEA_ID
+    });
     this.questionSetNumber = Math.floor(Math.random() * 4);
     console.log(this.questionSetNumber, 'questionSetNumber');
     console.log(this.questionsSet, 'questionsSet');
@@ -60,14 +69,29 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.nextCount >= 6) {
       if (this.usrCorrectAnsCount === this.botCorrectAnsCount) {
+        const data = {
+          result: 'TIE',
+          points: this.usrCorrectAnsCount
+        };
+        this.telemetryService.badge(data);
         alert('Tie');
         this.router.navigate(['/landing']);
 
       } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount) {
+        const data = {
+          result: 'WINNER',
+          points: this.usrCorrectAnsCount
+        };
+        this.telemetryService.badge(data);
         alert('congratulation you are the Winner');
         this.router.navigate(['/landing']);
 
       } else {
+        const data = {
+          result: 'LOOSER',
+          points: this.usrCorrectAnsCount
+        };
+        this.telemetryService.badge(data);
         alert('Winner is Bot');
         this.router.navigate(['/landing']);
 

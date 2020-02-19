@@ -3,7 +3,7 @@ import { questions } from '../constant.file';
 import { SpeechRecognitionService } from '../speech-recognition.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TelemetryService } from '../services/telemetry/telemetry.service';
 @Component({
   selector: 'app-home',
@@ -25,33 +25,45 @@ export class HomeComponent implements OnInit, OnDestroy {
   questionSetNumber: any;
   STALL_ID = 'STA3';
   IDEA_ID = 'IDE26';
+  showWinnerModal: any;
   // tslint:disable-next-line: variable-name
   recorded_message = '';
+  winnerText = '';
+  userDetails = localStorage.getItem('userDetails');
   recognition = new window.speechRecognition();
 
   spellUserText: any;
   public unsubscribe$ = new Subject<void>();
-  constructor(public speechService: SpeechRecognitionService, public router: Router,
-    public telemetryService: TelemetryService) { }
+  constructor(public speechService: SpeechRecognitionService,
+    public router: Router,
+    public telemetryService: TelemetryService,
+    public activateRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.telemetryService.initialize({
       did: 'device1',
       stallId: this.STALL_ID,
-      ideaId: this.IDEA_ID
+      ideaId: this.IDEA_ID,
+      userId: this.userDetails['userId']
     });
+    this.userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    console.log(this.userDetails, 'userDetails');
+
+
     this.questionSetNumber = Math.floor(Math.random() * 4);
-    console.log(this.questionSetNumber, 'questionSetNumber');
-    console.log(this.questionsSet, 'questionsSet');
+    // console.log(this.questionSetNumber, 'questionSetNumber');
+    // console.log(this.questionsSet, 'questionsSet');
 
     this.currentQuestion = this.questionsSet[this.questionSetNumber][0];
-    console.log(this.currentQuestion, 'currentQuestion');
+    // console.log(this.currentQuestion, 'currentQuestion');
 
     this.recognition.lang = 'hi';
     this.nextButtonname = 'NEXT';
   }
   goToLandingPage() {
-    this.router.navigate(['/landing']);
+    this.router.navigate(['/landing', this.activateRoute.snapshot.queryParams]);
+    window.open(`http://localhost:3000/`);
   }
   checkTheBotAnswer() {
     const question = this.currentQuestion;
@@ -65,37 +77,50 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
   getNextQuestion() {
-    console.log(this.currentQuestion, 'this.currentQuestion');
-
+    // console.log(this.currentQuestion, 'this.currentQuestion');
     if (this.nextCount >= 6) {
+      this.showWinnerModal = true;
+
+      console.log(this.showWinnerModal, ' this.showWinnerModal');
+      localStorage.removeItem('userDetails');
       if (this.usrCorrectAnsCount === this.botCorrectAnsCount) {
+        this.winnerText = 'THE GAME IS TIED';
         const data = {
           result: 'TIE',
-          points: this.usrCorrectAnsCount
+          points: this.usrCorrectAnsCount,
+          userId: this.userDetails['userId']
+
         };
         this.telemetryService.badge(data);
-        alert('Tie');
-        this.router.navigate(['/landing']);
-
+        // alert('Tie');
+        // this.router.navigate(['/landing']);
+        
       } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount) {
+        this.winnerText = 'Congratulation ' + this.userDetails['userName'] +' you won ';
         const data = {
           result: 'WINNER',
-          points: this.usrCorrectAnsCount
+          points: this.usrCorrectAnsCount,
+          userId: this.userDetails['userId']
+
         };
         this.telemetryService.badge(data);
-        alert('congratulation you are the Winner');
-        this.router.navigate(['/landing']);
+        // alert('congratulation you are the Winner');
+        // this.router.navigate(['/landing']);
 
       } else {
+        this.winnerText = 'You lost game ';
         const data = {
           result: 'LOOSER',
-          points: this.usrCorrectAnsCount
+          points: this.usrCorrectAnsCount,
+          userId: this.userDetails['userId']
+
         };
         this.telemetryService.badge(data);
-        alert('Winner is Bot');
-        this.router.navigate(['/landing']);
+        // alert('Winner is Bot');
+        // this.router.navigate(['/landing']);
 
       }
+
     } else {
       this.currentQuestion = this.questionsSet[this.questionSetNumber][this.nextCount];
       this.handledBotQuestionSet.push(this.currentBotQuestion);
@@ -104,10 +129,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.handledBotQuestionSet.length === 5) {
         this.nextButtonname = 'SHOW WINNER';
       }
-      console.log(this.nextCount, 'this.nextCount');
+      // console.log(this.nextCount, 'this.nextCount');
 
-      console.log(this.handledUserQuestionSet, 'this.handledUserQuestionSet');
-      console.log(this.handledBotQuestionSet, 'this.handledBotQuestionSet');
+      // console.log(this.handledUserQuestionSet, 'this.handledUserQuestionSet');
+      // console.log(this.handledBotQuestionSet, 'this.handledBotQuestionSet');
 
 
       this.currentBotQuestion = '';
@@ -165,14 +190,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           this.recorded_message = this.recorded_message.toString().concat(event.results[i][0].transcript);
-          console.log(this.recorded_message, 'recorded_message');
+          // console.log(this.recorded_message, 'recorded_message');
         }
       }
     };
     this.recognition.onend = (event) => {
     };
     this.recognition.start();
-    console.log(this.recorded_message, 'recorded_message');
+    // console.log(this.recorded_message, 'recorded_message');
   }
 
   stopRecording() {

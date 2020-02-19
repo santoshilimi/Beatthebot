@@ -23,6 +23,7 @@ import {TelemetryService} from './services/telemetry/telemetry.service';
     HttpClientModule,
   ],
   providers: [TelemetryService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  // exports: [EndComponent]
 })
 export class AppModule { }

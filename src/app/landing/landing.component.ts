@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -7,12 +7,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent implements OnInit {
-
-  constructor(public router: Router) { }
+  userDetails: any;
+  constructor(public router: Router, public activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.userDetails = this.activateRoute.snapshot.queryParams;
+    localStorage.setItem('userDetails', JSON.stringify(this.userDetails));
+    console.log(this.activateRoute.snapshot.queryParams, 'this.activateRoute.snapshot.queryParams');
   }
 goToHome() {
-  this.router.navigate(['/home']);
+  const navigationExtras: NavigationExtras = {
+    queryParams: this.userDetails
+  };
+  this.router.navigate(['/home', navigationExtras]);
 }
 }

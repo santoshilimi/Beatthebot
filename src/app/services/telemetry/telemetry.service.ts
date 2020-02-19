@@ -27,7 +27,7 @@ export class TelemetryService {
       eid : 'DC_EARN',
       ets: (new Date()).getTime(),
       did: this.did,
-      profileId: data.profileId,
+      profileId: data.userId,
       stallId: this.stallId,
       ideaId: this.ideaId,
       mid: '',

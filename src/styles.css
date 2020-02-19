@@ -72,7 +72,15 @@ body {
     box-shadow: 0 0 0.125em rgba(0, 0, 0, 0.2);
     color: #fff;
 }
-
+.btn.btn--white {
+    border: 3px dashed #fff;
+    color: #fff;
+}
+.btn.btn--white:hover {
+    background: #fff;
+    box-shadow: 0 0 0.125em rgba(0, 0, 0, 0.2);
+    color: #333;
+}
 .btn.btn--small {
     padding: 8px 16px;
     font-size: 12px;

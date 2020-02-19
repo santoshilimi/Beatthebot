@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   getTextFromUser() {
     const obj = {
-      src: 'Hi hello',
+      src: this.recorded_message,
       "id": 56,
       "index": 2,
       "userAns": '',

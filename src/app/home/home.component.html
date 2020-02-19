@@ -3,10 +3,13 @@
 
     <div class="translate__info">
       <h2>Translate the below Sentence</h2>
+      <div class="replay-home">
+        <img src="/assets/images/replay-home.svg" alt="Go to Home" (click)="goToLandingPage()">
+      </div>
     </div>
 
     <div class="translate__msg" *ngIf="currentQuestion">
-      <h1>Q{{currentQuestion.index + 1}}.{{currentQuestion.src}}</h1>
+      <h2 class="m-0">{{currentQuestion.src}} </h2>
     </div>
 
     <div class="user-information">
@@ -22,35 +25,35 @@
 
     <div class="record__audio">
       <div class="record__audio__user">
-          <div class="audio-container" (click)="startRecording()" *ngIf="showRecord">
-              <div class="audio-icon"><img src="/assets/images/audio-record.svg" alt=""></div>
-          </div>
-          <div class="audio-container" (click)="stopRecording()" *ngIf="!showRecord">
-            <div class="audio-icon"><img src="/assets/images/stop.svg" alt=""></div>
+        <div class="audio-container" (click)="startRecording()" *ngIf="showRecord">
+          <div class="audio-icon"><img src="/assets/images/audio-record.svg" alt=""></div>
         </div>
-          <h2 class="audio-printed" *ngIf="currentUserQuestion">
-            {{currentUserQuestion['src']}}</h2>
+        <div class="audio-container" (click)="stopRecording()" *ngIf="!showRecord">
+          <div class="audio-icon"><img src="/assets/images/stop.svg" alt=""></div>
+        </div>
+        <h2 class="audio-printed" *ngIf="currentUserQuestion">
+          {{currentUserQuestion['src']}}</h2>
       </div>
       <div class="arrow-image" (click)="checkTheBotAnswer()">
-          <img src="/assets/images/right-arrow.svg" alt="">
+        <img src="/assets/images/right-arrow.svg" alt="">
       </div>
       <div class="record__audio__bot">
-          <div class="audio-container">
-              <div class="bot-icon"><img src="/assets/images/bot.svg" alt=""></div>
-          </div>
-          <h2 class="bot-printed" *ngIf="currentBotQuestion">
-            {{currentBotQuestion['tgt']}}</h2>
+        <div class="audio-container">
+          <div class="bot-icon"><img src="/assets/images/bot.svg" alt=""></div>
+        </div>
+        <h2 class="bot-printed" *ngIf="currentBotQuestion">
+          {{currentBotQuestion['tgt']}}</h2>
       </div>
-  </div>
+    </div>
 
     <div class="question__set__container">
 
       <div class="question__set__user">
         <div *ngFor="let items of handledUserQuestionSet; let i = index" class="question__set">
-          <div class="question__status question__status--left" *ngIf="items['userAns'] === 0">
+          <div class="question__status question__status--left" *ngIf="items.userAns === 0">
             <div class="icon icon--wrong"></div>
           </div>
-          <div class="question__status question__status--left" *ngIf="items['userAns'] === 1">
+          <div class="question__status question__status--left" *ngIf="items.userAns === 1">
             <div class="icon icon--right"></div>
           </div>
           <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
@@ -59,10 +62,10 @@
       </div>
       <div class="question__set__bot">
         <div *ngFor="let items of handledBotQuestionSet; let i = index" class="question__set">
-          <div class="question__status question__status--right" *ngIf="items['botAns'] === 0">
+          <div class="question__status question__status--right" *ngIf="items.botAns === 0">
             <div class="icon icon--wrong"></div>
           </div>
-          <div class="question__status question__status--right" *ngIf="items['botAns']=== 1">
+          <div class="question__status question__status--right" *ngIf="items.botAns=== 1">
             <div class="icon icon--right"></div>
           </div>
           <h3 class="m-0">Q{{i+1}}. &nbsp;</h3>
@@ -78,28 +81,36 @@
 
     <div class="decide-answer">
       <div class="decide-answer__user" *ngIf="currentUserQuestion">
-        <button class="btn btn--secondary btn--small" (click)="userCorrectAns()">Correct
+        <button class="btn  btn--small"
+          [ngClass]="[this.currentUserQuestion.userAns === 1 ? 'checkedClass' : 'btn--secondary']"
+          (click)="userCorrectAns()">Correct
         </button>
-        <button class="btn btn--danger btn--small" (click)="userWrongAns()">Wrong</button>
+        <button class="btn  btn--small"
+          [ngClass]="[this.currentUserQuestion.userAns === 0 ? 'uncheckedClass' : 'btn--danger']"
+          (click)="userWrongAns()">Wrong</button>
       </div>
       <div class="decide-answer__bot" *ngIf="currentBotQuestion">
-        <button class="btn btn--secondary btn--small" (click)="botCorrectAns()">Correct
+        <button class="btn btn--small"
+          [ngClass]="[this.currentBotQuestion.botAns === 1 ? 'checkedClass' : 'btn--secondary']"
+          (click)="botCorrectAns()">Correct
         </button>
-        <button class="btn btn--danger btn--small" (click)="botWrongAns()">Wrong</button></div>
+        <button class="btn  btn--small"
+          [ngClass]="[this.currentBotQuestion.botAns === 0 ? 'uncheckedClass' : 'btn--danger']"
+          (click)="botWrongAns()">Wrong</button></div>
     </div>
 
     <div class="score-card">
-        <div class="score-card__user">
-          <h1>Score: {{usrCorrectAnsCount}}/5</h1>
-        </div>
-        <div class="score-card__bot">
-          <h1>Score: {{botCorrectAnsCount}}/5</h1>
-        </div>
+      <div class="score-card__user">
+        <h1>Score: {{usrCorrectAnsCount}}/5</h1>
       </div>
+      <div class="score-card__bot">
+        <h1>Score: {{botCorrectAnsCount}}/5</h1>
+      </div>
+    </div>
 
     <div class="submit-btn">
-      <button class="btn btn--start" (click)="getNextQuestion()">NEXT</button>
+      <button class="btn btn--start" (click)="getNextQuestion()">{{nextButtonname}}</button>
     </div>
-    
+
   </div>
 </div>

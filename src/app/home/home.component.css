@@ -33,13 +33,29 @@
 
 .translate__info {
     padding: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.translate__info h2 {
+    margin-right: auto;
+}
+
+.translate__info .replay-home {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.replay-home img {
+    width: 100%;
 }
 
 .translate__msg {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 8px 16px;
     border: 1px solid #79b5da;
     background: #d3e2ea;
     border-radius: 20px;

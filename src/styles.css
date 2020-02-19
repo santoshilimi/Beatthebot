@@ -56,7 +56,7 @@ body {
     color: #8cf391;
 }
 
-.btn.btn--secondary:hover {
+.btn.btn--secondary:hover, .btn.checkedClass {
     background: #8cf391;
     box-shadow: 0 0 0.125em rgba(0, 0, 0, 0.2);
     color: #fff;
@@ -67,7 +67,7 @@ body {
     color: #e21f11;
 }
 
-.btn.btn--danger:hover {
+.btn.btn--danger:hover, .btn.uncheckedClass {
     background: #e21f11;
     box-shadow: 0 0 0.125em rgba(0, 0, 0, 0.2);
     color: #fff;
@@ -78,6 +78,9 @@ body {
     font-size: 12px;
 }
 
+.btn.checkedClass, .btn.uncheckedClass {
+    border: none;
+}
 .animated {
     animation-duration: 1s;
     animation-fill-mode: both;

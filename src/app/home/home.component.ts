@@ -19,6 +19,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   botCorrectAnsCount = 0;
   usrCorrectAnsCount = 0;
   showRecord = true;
+  nextCount = 1;
+  nextButtonname: any;
+  questionSetNumber: any;
   // tslint:disable-next-line: variable-name
   recorded_message = '';
   recognition = new window.speechRecognition();
@@ -28,9 +31,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(public speechService: SpeechRecognitionService, public router: Router) { }
 
   ngOnInit() {
-    this.currentQuestion = this.questionsSet[0];
-    this.recognition.lang = 'hi';
+    this.questionSetNumber = Math.floor(Math.random() * 4);
+    console.log(this.questionSetNumber, 'questionSetNumber');
+    console.log(this.questionsSet, 'questionsSet');
 
+    this.currentQuestion = this.questionsSet[this.questionSetNumber][0];
+    console.log(this.currentQuestion, 'currentQuestion');
+
+    this.recognition.lang = 'hi';
+    this.nextButtonname = 'NEXT';
+  }
+  goToLandingPage() {
+    this.router.navigate(['/landing']);
   }
   checkTheBotAnswer() {
     const question = this.currentQuestion;
@@ -44,12 +56,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
   getNextQuestion() {
-    if (this.currentQuestion.index + 1 === 5) {
+    console.log(this.currentQuestion, 'this.currentQuestion');
+
+    if (this.nextCount >= 6) {
       if (this.usrCorrectAnsCount === this.botCorrectAnsCount) {
         alert('Tie');
         this.router.navigate(['/landing']);
 
-      } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount){
+      } else if (this.usrCorrectAnsCount > this.botCorrectAnsCount) {
         alert('congratulation you are the Winner');
         this.router.navigate(['/landing']);
 
@@ -59,9 +73,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       }
     } else {
-      this.currentQuestion = this.questionsSet[this.currentQuestion.index + 1];
+      this.currentQuestion = this.questionsSet[this.questionSetNumber][this.nextCount];
       this.handledBotQuestionSet.push(this.currentBotQuestion);
       this.handledUserQuestionSet.push(this.currentUserQuestion);
+      this.nextCount++;
+      if (this.handledBotQuestionSet.length === 5) {
+        this.nextButtonname = 'SHOW WINNER';
+      }
+      console.log(this.nextCount, 'this.nextCount');
+
+      console.log(this.handledUserQuestionSet, 'this.handledUserQuestionSet');
+      console.log(this.handledBotQuestionSet, 'this.handledBotQuestionSet');
+
+
       this.currentBotQuestion = '';
       this.currentUserQuestion = '';
       this.showRecord = true;
@@ -75,7 +99,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   botWrongAns() {
     this.currentBotQuestion.botAns = 0;
-    // this.botCorrectAnsCount--;
+    // if (this.botCorrectAnsCount) {
+    //   this.botCorrectAnsCount--;
+    // }
   }
   userCorrectAns() {
     this.currentUserQuestion.userAns = 1;
@@ -83,26 +109,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   userWrongAns() {
     this.currentUserQuestion.userAns = 0;
+    // if (this.usrCorrectAnsCount) {
     // this.usrCorrectAnsCount--;
+    // }
   }
   getTextFromUser() {
     const obj = {
-      src: this.recorded_message,
+      src: 'Hi hello',
       "id": 56,
       "index": 2,
       "userAns": '',
       "botAns": ''
     };
     this.currentUserQuestion = obj;
-    // question.src = this.recorded_message;
     this.recorded_message = "";
-    // this.speechService.getConfig([obj])
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe(response => {
-    //     obj['tgt'] = response['response_body'][0].tgt;
-    //     this.currentUserQuestion = obj;
-    //     this.handledUserQuestionSet.push(obj);
-    //   });
 
   }
   startRecording() {

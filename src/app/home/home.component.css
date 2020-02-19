@@ -9,6 +9,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: url(/assets/images/wallpaper.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .translation__box {

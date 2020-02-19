@@ -16,7 +16,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "I have a lot of thing to eat.",
+            "src": "This is a book",
             "index": 2,
             "userAns": "",
             "botAns": ""
@@ -46,7 +46,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "Dip your thumb in the colours.",
+            "src": "That is a pencil.",
             "index": 1,
             "userAns": "",
             "botAns": ""
@@ -60,7 +60,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "I love you",
+            "src": "I kill you",
             "index": 3,
             "userAns": "",
             "botAns": ""
@@ -76,28 +76,28 @@ export const questions = [
         [
           {
             "id": 56,
-            "src": "I always look at her with wonder",
+            "src": "It is difficult.",
             "index": 0,
             "userAns": "",
             "botAns": ""
           },
           {
             "id": 56,
-            "src": "One who goes on a journey to a holy place",
+            "src": "I am good ",
             "index": 1,
             "userAns": "",
             "botAns": ""
           },
           {
             "id": 56,
-            "src": "The person who works for free ",
+            "src": "I opened the door ",
             "index": 2,
             "userAns": "",
             "botAns": ""
           },
           {
             "id": 56,
-            "src": "A thing that is kept as a reminder of an event",
+            "src": "Has he come?",
             "index": 3,
             "userAns": "",
             "botAns": ""

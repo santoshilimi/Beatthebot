@@ -30,7 +30,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "The arrival of Europeans to India",
+            "src": "The arrival of Europeans",
             "index": 4,
             "userAns": "",
             "botAns": ""
@@ -67,7 +67,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "orange is a color and also a fruit",
+            "src": "orange is a color",
             "index": 4,
             "userAns": "",
             "botAns": ""
@@ -104,7 +104,7 @@ export const questions = [
           },
           {
             "id": 56,
-            "src": "We get different types of flowers from plants",
+            "src": "How are you",
             "index": 4,
             "userAns": "",
             "botAns": ""
